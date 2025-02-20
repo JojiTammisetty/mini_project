@@ -2,7 +2,7 @@ import urllib
 import streamlit as st
 import pandas as pd
 import numpy as np
-import joblib
+from joblib import load, dump
 import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split, GridSearchCV
@@ -136,7 +136,7 @@ optimized_model = grid_search.best_estimator_
 st.write(f"Optimized {best_model_name} Model F1-Score: {grid_search.best_score_:.2f}")
 
 # Save Best Model
-joblib.dump(optimized_model, "diabetes_model.pkl")
+dump(optimized_model, "diabetes_model.pkl")
 
 # -------------------------
 # Step 5: User Input for Prediction
@@ -166,7 +166,7 @@ if st.button("Predict Diabetes"):
     input_data_scaled = scaler.transform(input_data)
 
     # Load Model and Predict
-    model = joblib.load("diabetes_model.pkl")
+    model = load("diabetes_model.pkl")
     prediction = model.predict(input_data_scaled)
 
     if prediction[0] == 1:
