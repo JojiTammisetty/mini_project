@@ -1,5 +1,4 @@
 import urllib
-
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -9,7 +8,7 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
@@ -76,8 +75,10 @@ models = {
     "Logistic Regression": LogisticRegression(),
     "Decision Tree": DecisionTreeClassifier(),
     "Random Forest": RandomForestClassifier(n_estimators=100),
-    "SVM": SVC(kernel="linear", probability=True)
+    "SVM": SVC(kernel="linear", probability=True),
+    "AdaBoost": AdaBoostClassifier(estimator=DecisionTreeClassifier(max_depth=1), n_estimators=50)
 }
+
 
 # Train and Evaluate Models
 results = {}
@@ -123,6 +124,8 @@ elif best_model_name == "SVM":
     param_grid = {'C': [0.1, 1, 10], 'kernel': ['linear', 'rbf']}
 elif best_model_name == "Logistic Regression":
     param_grid = {'C': [0.1, 1, 10]}
+elif best_model_name == "AdaBoost":
+    param_grid = {'n_estimators': [50, 100, 200], 'learning_rate': [0.1, 0.5, 1.0]}
 
 # Run Grid Search
 grid_search = GridSearchCV(best_model, param_grid, cv=5, scoring='f1', n_jobs=-1)
